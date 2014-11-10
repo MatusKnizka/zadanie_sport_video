@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" href="reset.css">
+	<link rel="stylesheet" media="screen and (min-width: 600px)" href="style.css" />
+	<link rel="stylesheet" media="screen and (max-width: 600px)" href="style_small.css" />
+	<title>Zadanie</title>
+</head>
+<body>
+	<main class="list">
+
+		<header class="list-header">
+			<h1 class="list-title">LATEST VIDEOS</h1>
+		</header>
+
+		<ul class="list-body">
+
+
+			<div class='item-template' style='display: none'>
+				<li class="list-item">
+					<div class="list-item-shadow">
+						<span class="list-item-shadow-title">FOOTBALL</span>
+					</div>
+					<video class="list-item-video"  controls>
+					</video>
+					<article class="list-item-text">
+						<h2 class="list-item-title">Play safety ! </h2>
+						<h3 class="list-item-date">Tuesday, 26. August 2014</h3>
+					</article>
+				</li>
+			</div>
+
+		</ul>
+
+		<footer class="paging">
+			<div class="paging-previous button">PREVIOUS</div>
+			<div class="paging-pagenum paging-selected">1</div>
+			<div class="paging-pagenum">2</div>
+			<div class="paging-pagenum">3</div>
+			...
+			<div class="paging-pagenum">94</div>
+			<div class="paging-next button">NEXT</div>
+		</footer>
+
+		<article class="load-button">
+			<button>LOAD MORE</button>
+		</article>
+	</main>
+</body>
+<script src="libary.js"></script>
+</html>
