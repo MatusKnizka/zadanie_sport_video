@@ -17,36 +17,28 @@
 		<ul class="list-body">
 
 
-			<div class='item-template' style='display: none'>
-				<li class="list-item">
-					<div class="list-item-shadow">
-						<span class="list-item-shadow-title">FOOTBALL</span>
-					</div>
-					<video class="list-item-video"  controls>
-					</video>
-					<article class="list-item-text">
-						<h2 class="list-item-title">Play safety ! </h2>
-						<h3 class="list-item-date">Tuesday, 26. August 2014</h3>
-					</article>
-				</li>
-			</div>
+			
 
 		</ul>
 
 		<footer class="paging">
-			<div class="paging-previous button">PREVIOUS</div>
-			<div class="paging-pagenum paging-selected">1</div>
-			<div class="paging-pagenum">2</div>
-			<div class="paging-pagenum">3</div>
-			...
-			<div class="paging-pagenum">94</div>
-			<div class="paging-next button">NEXT</div>
+			<div class="paging-previous button" onclick="paging.previousPage()">PREVIOUS</div>
+			<div class="paging-buttons" id="paging-buttons">
+				<!-- BUTTONS -->
+			</div>
+			<div class="paging-next button" onclick="paging.nextPage()">NEXT</div>
 		</footer>
 
-		<article class="load-button">
+		<article class="load-button" onclick="loading.loadMore()">
 			<button>LOAD MORE</button>
 		</article>
 	</main>
+	<title>JSON and AJAX</title>
+</head>
 </body>
+<div id='page' style='display: none'>1</div>
+<div id='items_all' style='display: none'></div>
+
 <script src="libary.js"></script>
 </html>
+
