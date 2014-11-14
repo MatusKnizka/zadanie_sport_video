@@ -48,12 +48,8 @@ header
 	font-size: 20px;
 	font-family: arial;
 	color: #003363;
-
+	height: 0px;
 	margin-bottom: 50px;
-	text-overflow: ellipsis;
-	width: 80%;
-	overflow: hidden;
-	white-space: nowrap;
 }
 
 .list-item-date
