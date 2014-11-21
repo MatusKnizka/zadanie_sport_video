@@ -1,14 +1,21 @@
-var ajax = {};
-var JSONObject;
 
-ajax.loadJSON = function(url)
-{
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange=function()
+
+var MyApp = (function(window, document){
+
+
+
+
+	var ajax = {};
+	var JSONObject;
+
+	ajax.loadJSON = function(url)
 	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function()
 		{
-			JSONObject = JSON.parse(xmlhttp.responseText);
+			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			{
+				JSONObject = JSON.parse(xmlhttp.responseText);
 			ajax.callback(JSONObject); // callback
 		}
 	}
@@ -22,7 +29,9 @@ ajax.callback = function(JSONObject) // callback funkcia - ulozenie json suboru 
 	videos.jsonLength = JSONObject.length;
 	paging.page = 1;
 	paging.itemsWriteSelect();
+	categories.selectList();
 	videos.write();
+
 }
 
 
@@ -193,29 +202,30 @@ paging.pagePanel = function()
 	}
 
 	if(page > 2) {
-		page_item += '<div class="paging-pagenum" onclick="paging.concretePage(1)">1</div>';
+		page_item += '<div class="paging-pagenum" data-id="1">1</div>';
 		if(page > 3) { page_item += "..."; }
 	}
 	for(x=1; x<=pages; x++) {
 		if(x-1 === page) {
-			page_item += '<div class="paging-pagenum" onclick="paging.concretePage('+x+')">'+x+'</div>';
+			page_item += '<div class="paging-pagenum" data-id="'+x+'" >'+x+'</div>';
 		}
 
 		if(x === page) {
-			page_item += '<div class="paging-pagenum paging-selected">'+x+'</div>';
+			page_item += '<div class="paging-pagenum paging-selected" data-id="'+x+'">'+x+'</div>';
 		}
 
 		if(x+1 === page) {
-			page_item += '<div class="paging-pagenum" onclick="paging.concretePage('+x+')">'+x+'</div>';
+			page_item += '<div class="paging-pagenum" data-id="'+x+'">'+x+'</div>';
 		}
 	}
 
 	if(page+1 < pages ) {
 		if(page+2 < pages) { page_item += "..."; } 
-		page_item += '<div class="paging-pagenum" onclick="paging.concretePage('+pages+')">'+pages+'</div>';
+		page_item += '<div class="paging-pagenum" data-id="'+pages+'">'+pages+'</div>';
 	}
 
 	document.getElementById("paging-buttons").innerHTML = page_item;
+	paging.clickEvent();
 }
 
 
@@ -268,7 +278,6 @@ paging.item_max = function(page, media)
 
 paging.itemsToPageFunc = function()
 {
-
 	var num = document.getElementById("list-select").value;
 	paging.itemsToPage = num*1;
 
@@ -312,7 +321,63 @@ paging.itemsWriteSelect = function()
 }
 
 
+paging.clickEvent = function() {
+	$(document).ready(function(){
+		$(".paging-pagenum").click(function(){
+			var index = $(this).index();
+			var index = $(".paging-pagenum").eq(index).attr("data-id");
+			paging.concretePage(index*1);
+		});
+	});
+}
 
+
+var categories = {};
+
+categories.selectList = function() {
+
+	var data = videos.jsonData;
+	var categories = [];
+	categories[0] = "Football";
+	var control = 0;
+
+	for(x=0; x<videos.jsonLength; x++) {
+		for(i=0; i<videos.jsonData[x].categories.length; i++) {
+			control = 0;
+			for(j=0; j<categories.length; j++) {
+				if(videos.jsonData[x].categories[i] !== categories[j]) {
+					console.log(videos.jsonData[x].categories[i] +" sa nerovna "+ categories[j]);
+					control = 1;
+				}
+				else {
+					control = 0;
+					break;
+				}
+
+			}	
+			if(control === 1) {
+				categories.push(videos.jsonData[x].categories[i]);
+				console.log("push");
+				control = 0;
+				
+			}
+		}
+	}
+	console.log(categories);
+	// var item;
+	// var array = [8,12,16,20];
+	// var num;
+
+	// num = paging.itemsToPageNum();
+	// for(x=0; x<array.length; x++) {
+	// 	if(array[x] == num) {
+	// 		item += "<option value="+array[x]+" selected>"+array[x]+"</option>";
+	// 	} else {
+	// 		item += "<option value="+array[x]+" >"+array[x]+"</option>";
+	// 	}
+	// }
+	// document.getElementById("list-select").innerHTML = item;
+}
 
 var loading = {};
 
@@ -330,6 +395,19 @@ loading.loadMore = function()
 }
 
 
-	ajax.loadJSON("http://academy.tutoky.com/api/json.php"); // nacitanie json suboru cez AJAX
 
+document.getElementById("list-select").addEventListener("change", paging.itemsToPageFunc);
+document.getElementById("paging-previous").addEventListener("click", paging.previousPage);
+document.getElementById("paging-next").addEventListener("click", paging.nextPage);
+document.getElementById("load-button").addEventListener("click", loading.loadMore);
+
+
+
+return ajax.loadJSON("http://academy.tutoky.com/api/json.php"); // nacitanie json suboru cez AJAX
+
+}(window, document));
+
+
+
+window.onload = MyApp;
 

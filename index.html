@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="shortcut icon" type="image/jpg" href="favicon.jpg"/>
+	<link rel="shortcut icon" type="image/jpg" href="favicon.jpg"/>
 	<meta charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" href="reset.css">
 	<link rel="stylesheet" media="screen and (min-width: 600px)" href="style.css" />
@@ -12,10 +14,13 @@
 
 		<header class="list-header">
 			<h1 class="list-title">LATEST VIDEOS</h1>
-
-			<select class="list-select" id="list-select" onchange="paging.itemsToPageFunc()">
+			<select class="list-select" id="list-select">
 				<!-- SELECT LIST FOR ITEMS TO PAGE -->
 			</select>
+
+			<select class="list-select" id="category-select">
+				<option  >ALL CATEGORIES</option>
+			</select> 
 		</header>
 
 		<ul class="list-body" id="list-body">
@@ -23,14 +28,14 @@
 		</ul>
 
 		<footer class="paging">
-			<div class="paging-previous button" id="paging-previous" onclick="paging.previousPage()">PREVIOUS</div>
+			<div class="paging-previous button" id="paging-previous">PREVIOUS</div>
 			<div class="paging-buttons" id="paging-buttons">
 				<!-- BUTTONS -->
 			</div>
-			<div class="paging-next button" id="paging-next" onclick="paging.nextPage()">NEXT</div>
+			<div class="paging-next button" id="paging-next">NEXT</div>
 		</footer>
 
-		<article class="load-button" onclick="loading.loadMore()">
+		<article class="load-button" id="load-button">
 			<button>LOAD MORE</button>
 		</article>
 	</main>
@@ -40,6 +45,8 @@
 <div id="item-template" style="display:none">
 	<!-- TEMPLATE -->
 </div>
+
+<script src="jquery.min.js"></script>
 <script src="libary.js"></script>
 </html>
 
