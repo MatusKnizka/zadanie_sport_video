@@ -2,9 +2,6 @@
 
 var MyApp = (function(window, document){
 
-
-
-
 	var ajax = {};
 	var JSONObject;
 
@@ -17,24 +14,22 @@ var MyApp = (function(window, document){
 			{
 				JSONObject = JSON.parse(xmlhttp.responseText);
 			ajax.callback(JSONObject); // callback
+			}
 		}
-	}
 	xmlhttp.open("POST", url, true);
 	xmlhttp.send();
-}
+	}
 
 ajax.callback = function(JSONObject) // callback funkcia - ulozenie json suboru do objektu
 {
+	videos.allData = JSONObject;
 	videos.jsonData = JSONObject;
 	videos.jsonLength = JSONObject.length;
 	paging.page = 1;
 	paging.itemsWriteSelect();
 	categories.selectList();
 	videos.write();
-
 }
-
-
 
 
 var videos = {};
@@ -70,7 +65,6 @@ videos.getCategories = function(categories) {
 		} else {
 			categories_string += categories[i]+", "; 
 		}
-		
 	}
 	return categories_string;
 }
@@ -80,7 +74,7 @@ videos.write = function(page, media)
 {
 	JSONObject = videos.jsonData;
 	paging.pagePanel();
-
+	page = paging.page;
 	var keys = Object.keys(JSONObject[0]);
 	
 	var item_min, item_max, i;
@@ -131,17 +125,20 @@ videos.write = function(page, media)
 	var response;
 	document.getElementById("item-template").innerHTML = "";
 	document.getElementById("item-template").appendChild(li);
-
 	for(i=item_min; i<item_max; i++) {
+		console.log(i);
+		
 		item = document.getElementById('item-template').innerHTML;
-		for(x=0; x<5; x++) {
+		for(x=0; x<4; x++) {
 			key = keys[x];
+			console.log(JSONObject[i][key]);
 			switch(key) {
 				case 'categories': response = videos.getCategories(JSONObject[i][key]);break;
 				case 'image': response = videos.getImage(JSONObject[i][key]);break;
 				case 'timestamp': response = videos.timestampParse(JSONObject[i][key]);break;
-				default: response = JSONObject[i][key];break;
+				default: response = JSONObject[i][key]; break;
 			}
+
 			item = item.replace("{{ "+key+" }}", response);
 		}
 		body += item;
@@ -238,7 +235,9 @@ paging.concretePage = function(page)
 
 paging.item_min = function(page, media)
 {
-	var itemsOnPage = paging.itemsToPageNum();
+	var itemsOnPage = paging.itemsToPageNum()*1;
+	
+
 	var items_all = videos.jsonLength;
 	if(page == undefined) {
 		page = 1;
@@ -256,7 +255,7 @@ paging.item_min = function(page, media)
 
 paging.item_max = function(page, media)
 {
-	var items_all = videos.jsonLength;
+	var items_all = videos.jsonData.length*1;
 	var itemsOnPage = paging.itemsToPageNum();
 	if(page == undefined) {
 		return itemsOnPage;
@@ -267,7 +266,9 @@ paging.item_max = function(page, media)
 	}
 
 	else {	
-		if((items_all-(page-1)*itemsOnPage) < itemsOnPage) {
+		
+		page = Math.ceil(page);
+		if((items_all-((page-1)*itemsOnPage)) <= itemsOnPage) {
 			return items_all;
 		}
 		else {
@@ -296,11 +297,13 @@ paging.itemsToPageFunc = function()
 
 paging.itemsToPageNum = function()
 {
+
 	if(paging.itemsToPage == undefined) {
 		return 12;
 	} else {
-		return paging.itemsToPage;
+		return paging.itemsToPage*1;
 	}
+
 }
 
 paging.itemsWriteSelect = function()
@@ -334,49 +337,73 @@ paging.clickEvent = function() {
 
 var categories = {};
 
-categories.selectList = function() {
+categories.select = function() {
+	var value = document.getElementById("category-select").value;
+	categories.category = document.getElementById("category-select").value;
+	
+	if(categories.category !== "All") {
+		videos.jsonData = categories.parseVideos(categories.category);
+		videos.jsonLength = videos.jsonData.length;
+		paging.itemsWriteSelect();
+		videos.write();
+	}
 
-	var data = videos.jsonData;
-	var categories = [];
-	categories[0] = "Football";
-	var control = 0;
+	else {
+		videos.jsonData = videos.allData;
+		videos.jsonLength = videos.jsonData.length;
+		paging.itemsWriteSelect();
+		videos.write();
+	}
+}
 
-	for(x=0; x<videos.jsonLength; x++) {
-		for(i=0; i<videos.jsonData[x].categories.length; i++) {
-			control = 0;
-			for(j=0; j<categories.length; j++) {
-				if(videos.jsonData[x].categories[i] !== categories[j]) {
-					console.log(videos.jsonData[x].categories[i] +" sa nerovna "+ categories[j]);
-					control = 1;
-				}
-				else {
-					control = 0;
-					break;
-				}
-
-			}	
-			if(control === 1) {
-				categories.push(videos.jsonData[x].categories[i]);
-				console.log("push");
-				control = 0;
-				
+categories.parseVideos = function(parseBy) {
+	var output = [];
+	for(x=0; x<videos.allData.length; x++) {
+		for(i=0; i<videos.allData[x].categories.length; i++) {
+			if(parseBy === videos.allData[x].categories[i]) {
+				output.push(videos.allData[x]);
+				break;
 			}
 		}
 	}
-	console.log(categories);
-	// var item;
-	// var array = [8,12,16,20];
-	// var num;
+	return output;
+}
 
-	// num = paging.itemsToPageNum();
-	// for(x=0; x<array.length; x++) {
-	// 	if(array[x] == num) {
-	// 		item += "<option value="+array[x]+" selected>"+array[x]+"</option>";
-	// 	} else {
-	// 		item += "<option value="+array[x]+" >"+array[x]+"</option>";
-	// 	}
-	// }
-	// document.getElementById("list-select").innerHTML = item;
+
+
+categories.selectList = function() {
+
+	var data = videos.jsonData;
+	var categories = ['All'];
+	var control = 0;
+	var item ="";
+
+	for(x=0; x<videos.jsonLength; x++) {
+		for(i=0; i<videos.jsonData[x].categories.length; i++) {
+			for(j=0; j<categories.length; j++) {
+				if(videos.jsonData[x].categories[i] !== categories[j]) {
+					control = 1;
+				} else {
+					control = 0;
+					break;
+				}
+			}	
+			if(control === 1) {
+				categories.push(videos.jsonData[x].categories[i]);
+				control = 0;
+			}
+		}
+	}
+	
+
+	for(x=0; x<categories.length; x++) {
+		if(categories[x] == categories.category) {
+			item += "<option value="+categories[x]+" selected>"+categories[x]+"</option>";
+		} else {
+			item += "<option value="+categories[x]+" >"+categories[x]+"</option>";
+		}
+	}
+	document.getElementById("category-select").innerHTML = item;
 }
 
 var loading = {};
@@ -394,20 +421,16 @@ loading.loadMore = function()
 	}
 }
 
-
-
 document.getElementById("list-select").addEventListener("change", paging.itemsToPageFunc);
 document.getElementById("paging-previous").addEventListener("click", paging.previousPage);
 document.getElementById("paging-next").addEventListener("click", paging.nextPage);
 document.getElementById("load-button").addEventListener("click", loading.loadMore);
-
+document.getElementById("category-select").addEventListener("change", categories.select);
 
 
 return ajax.loadJSON("http://academy.tutoky.com/api/json.php"); // nacitanie json suboru cez AJAX
 
 }(window, document));
-
-
 
 window.onload = MyApp;
 
