@@ -51,21 +51,34 @@ body
 	background-size: 100%;
 }
 
+.list-select {
+	background-color: #5e5e5e;
+	color: white;
+	font-size: 14px;
+	margin-right: 5px;
+	border-radius: 5px;
+	margin-top: -4px;
+	font-weight: bold;
+	padding: 2px;
+
+}
+
 .list-item-shadow
 {
 	width: 200px;
-	height: 100px; 
+	height: 175px; 
 	background-color: #585858;
 	position: relative;
-	margin-bottom: -100px;
+	margin-bottom: -175px;
 	opacity: 0.8;
 	color: white;
 	font-size: 18px;
 	text-align: center;
+	z-index: 10;
 
 }
 
-.list-item:hover >.list-item-shadow
+/*.list-item:hover >.list-item-shadow
 {
 	width: 200px;
 	height: 100px; 
@@ -74,7 +87,7 @@ body
 	margin-bottom: -100px;
 	opacity: 1;
 	font-size: 18px;
-}
+}*/
 
 .list-item-shadow-title
 {
@@ -82,6 +95,10 @@ body
 	top: 40px;
 }
 
+.list-item-shadow-categories
+{
+	cursor: pointer;
+}
 
 
 .list-item-title
@@ -118,25 +135,23 @@ body
 .paging-buttons
 {
 	display: inline-block;
+	width: 50%;
 }
 
 
 .button
 {
-	background-color: #81aad0;
+	background-color: #5aa1ec;
 	color: white;
 	display: inline-block;
 	padding: 10px;
 	width: 100px;
 	margin-left: 20px;
 	margin-right: 20px;
-}
-
-.button:hover
-{
-	background-color: blue;
 	cursor: pointer;
 }
+
+
 
 .paging-previous
 {
@@ -157,22 +172,24 @@ body
 .paging-pagenum
 {
 	display: inline-block;
-	background-color: #a8bdd0;
+	background-color: #5aa1ec;
 	color: white;
 	padding: 10px;
 	border-radius: 5px;
+	cursor: pointer;
+	margin: 10px;
 }
 
-.paging-pagenum:hover
-{
-	background-color: blue;
-	cursor:pointer;
-}
+
 
 
 .paging-selected
 {
-	background-color: blue;
+	display: inline-block;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #2162A6;
 }
 
 
