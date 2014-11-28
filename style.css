@@ -60,6 +60,12 @@ body
 	margin-top: -4px;
 	font-weight: bold;
 	padding: 2px;
+	border: 0px;
+
+	appearance:none;
+-moz-appearance:none; /* Firefox */
+-webkit-appearance:none;
+white-space: nowrap;
 
 }
 
@@ -77,17 +83,6 @@ body
 	z-index: 10;
 
 }
-
-/*.list-item:hover >.list-item-shadow
-{
-	width: 200px;
-	height: 100px; 
-	background-color: #cccccc;
-	position: relative;
-	margin-bottom: -100px;
-	opacity: 1;
-	font-size: 18px;
-}*/
 
 .list-item-shadow-title
 {

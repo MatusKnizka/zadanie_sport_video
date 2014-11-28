@@ -1,4 +1,6 @@
-(function(window, document){
+(function(window, document, undefined){
+
+
 	
 var JSONObject;
 
@@ -425,14 +427,14 @@ var animations = {
 
 			$(".list-item").mouseenter(function(){
 				var index = $(this).index();
-				$(".list-item-shadow").eq(index).fadeIn(300, function(){
-					$(".list-item-shadow-title").slideDown(300);
+				$(".list-item-shadow").eq(index).fadeIn(150, function(){
+					$(".list-item-shadow-title").eq(index).slideDown(200);
 				});
 			});
 
 			$(".list-item").mouseleave(function(){
 				var index = $(this).index();
-				$(".list-item-shadow-title").slideUp(500, function(){
+				$(".list-item-shadow-title").eq(index).slideUp(500, function(){
 					$(".list-item-shadow").eq(index).fadeOut(300);
 				});
 			});
