@@ -6,36 +6,11 @@
 
 	
 
-	function videoList(url, page, itemsToPage, category) {
-		this.load(url, function(xhr) { 
-			this.page = page;
-			this.itemsToPage = itemsToPage;
-			this.category = category;
-			this.allData = JSON.parse(xhr.responseText);
-			this.jsonData = JSON.parse(xhr.responseText); 
-			this.jsonLength = JSON.parse(xhr.responseText).length; 
-			this.render();
-		}.bind(this));
-	}
+	// trieda AjaxHelper, staticka metoda load (nepotrebuje instanciu)
+	AjaxHelper.load = function(url, params, func) {
+		var xhr = new XMLHttpRequest();
 
-	videoList.prototype.load = function(url, callback) {
-		var xhr;
-		if(typeof XMLHttpRequest !== 'undefined') xhr = new XMLHttpRequest();
-		else {
-			var versions = ["MSXML2.XmlHttp.5.0", 
-			"MSXML2.XmlHttp.4.0",
-			"MSXML2.XmlHttp.3.0", 
-			"MSXML2.XmlHttp.2.0",
-			"Microsoft.XmlHttp"]
-
-			for(var i = 0, len = versions.length; i < len; i++) {
-				try {
-					xhr = new ActiveXObject(versions[i]);
-					break;
-				} catch(e){}
-             } // end for
-         }    
-         xhr.onreadystatechange = ensureReadiness; 
+		xhr.onreadystatechange = ensureReadiness; 
          function ensureReadiness() {
          	if(xhr.readyState < 4) {
          		return;
@@ -49,29 +24,99 @@
          }     
          xhr.open('GET', url, true);
          xhr.send('');
-     }
+	}
 
-     videoList.prototype.render = function() {
-     	this.write(this.page); // WRITE VIDEO ITEMS TO PAGE
-     	this.pagination(); // PAGINATION
-     	paginationHelper.clickEvent();  // PAGINATION EVENT IN JQUERY
+	// trieda DateTimeHelper, staticka metoda load (nepotrebuje instanciu)
+	var DateTimeHelper = {
+		timestampParse: function(timestamp) {
+			var date = new Date(timestamp*1);
+			var day = date.getDate();
+			var month = date.getMonth();
+			var year = date.getFullYear();
+			var day_w = date.getDay();
+
+			days_array = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+			months_array = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+			return days_array[day_w]+", "+day+" "+months_array[month]+" "+year;
+		}
+	}
+
+
+	
+	// trieda List, staticka metoda load (nepotrebuje instanciu)
+	function List(name, url, page, itemsToPage, media) {
+		this.name = name;
+		this.rootElement = document.getElementById(name);
+		this.url = url;
+		this.page = page;
+		this.itemsToPage = itemsToPage;
+		this.categories = [];
+		this.media = media;
+		this.data = [];
+		this.itemStart = 1;
+		this.itemEnd =  this.itemsToPage;
+		this.selectedCategory = "";
+
+		this.load();
+	}
+
+	List.prototype.load = function() {
+		AjaxHelper.load(this.url, [], this.processResponse);
+	}
+
+	List.prototype.processResponse = function(xhr) {
+		var obj = JSON.parse(xhr.responseText);
+		this.videos = obj;
+
+		// find all categories
+		for ()
+		render();
+	}
+
+	List.prototype.selectCategory = function(selectedCategory) {
+		this.selectedCategory = selectedCategory;
+		this.page = 1;
+		render();
+	}
+
+	List.prototype.nextPage = function() {
+		var itemEnd = (this.page+1)*this.itemsToPage;
+		if (data.length <= itemEnd)
+			this.page += 1;
+			this.itemStart = this.page*this.itemsToPage;
+			this.itemEnd = itemEnd;
+		}
+	}
+
+	List.prototype.previousPage = function() {
+		if (this.page !== 1) {
+			this.page -= 1;
+			this.itemStart = this.page*this.itemsToPage;
+			this.itemEnd = (this.page-1)*this.itemsToPage;
+		}
+	}
+
+    List.prototype._render = function() {
+     	this._renderList();
+     	this._renderPagination();
+     	/*paginationHelper.clickEvent();
      	animations.paginationPageButtonHover();  // ANIMATIONS OF PAGINATION
      	categoriesHelper.selectList(this.jsonData, this.jsonLength, this.category); // SELECT LIST FOR CATEGORIES
      	paginationHelper.itemsWriteSelect(this.itemsToPage);  // SELECT LIST FOR NUMBER OF ITEMS ON PAGE
      	animations.itemHover(); // ANIMATION FOR ITEM
      	animations.paginationButtonHover();  // ANIMATION FOR PREV AND NEXT BUTTON
-     	categoriesHelper.eventList();
+     	categoriesHelper.eventList();*/
      };
 
-     videoList.prototype.write = function(page, media) {
-     	var JSONObject = this.jsonData;
-     	var item_min = writeHelper.item_min(page, media, this.jsonLength, this.itemsToPage);
-     	var item_max = writeHelper.item_max(page, media, this.jsonLength, this.itemsToPage);
+     List.prototype._renderList = function(page, media) {
+     	//var JSONObject = this.jsonData;
+     	//var itemMin = writeHelper.item_min(page, media, this.jsonLength, this.itemsToPage);
+     	//var itemMax = writeHelper.item_max(page, media, this.jsonLength, this.itemsToPage);
 
      	var frag = document.createDocumentFragment();
-     	document.getElementsByClassName("list-body")[0].innerHTML = "";
+     	this.rootElement.getElementsByClassName("list-body")[0].innerHTML = "";
 
-     	for(var i=item_min; i<item_max; i++) {
+     	for(var i=this.itemStart; i<this.itemEnd; i++) {
      		var li = document.createElement("li"); 
      		li.className = "list-item";  
 
@@ -101,10 +146,10 @@
      		article.appendChild(h2);
      		article.appendChild(h3); 
      		
-     		var title = document.createTextNode(JSONObject[i]['title']);
-     		var timestamp = document.createTextNode(writeHelper.timestampParse(JSONObject[i]['timestamp']));
-     		var video_title = writeHelper.getCategories(JSONObject[i]['categories']);
-     		video.setAttribute('style', 'background: url('+writeHelper.getImage(JSONObject[i]['image'])+'.jpg);background-size: cover;background-position: center center;');
+     		var title = document.createTextNode(this.data[i]['title']);
+     		var timestamp = document.createTextNode(DateTimeHelper.timestampParse(this.data[i]['timestamp']));
+     		var videoTitle = WriteHelper.getCategories(this.data[i]['categories']);
+     		video.setAttribute('style', 'background: url('+WriteHelper.getImage(this.data[i]['image'])+'.jpg);background-size: cover;background-position: center center;');
 
      		span.appendChild(video_title);  
      		h2.appendChild(title);
@@ -112,59 +157,68 @@
      		frag.appendChild(li);
      	}
 
-     	document.getElementsByClassName("list-body")[0].appendChild(frag);
-     	$(".list-item").fadeOut(1, function(){
+     	this.rootElement.getElementsByClassName("list-body")[0].appendChild(frag);
+     	/*$(".list-item").fadeOut(1, function(){
      		$(".list-item").fadeIn(500);
-     	});	
+     	});*/	
     };
 
-     videoList.prototype.pagination = function() {
-     	var itemsOnPage = paginationHelper.itemsToPageNum(this.itemsToPage);
-     	var page = this.page*1;
-     	var items_all = this.jsonLength;
-     	var page_item = "";
-     	var pages = Math.ceil(items_all/itemsOnPage);
+     List.prototype._renderPagination = function() {
+     	//var itemsOnPage = paginationHelper.itemsToPageNum(this.itemsToPage);
+     	//var page = this.page*1;
+     	//var items_all = this.jsonLength;
+     	var pageItems = "";
+     	var pages = Math.ceil(this.data.length/this.itemsToPage);
 
-     	if(page === 1) {
-     		document.getElementById("paging-previous").style.visibility = "hidden";
+     	// first page
+     	if(this.page === 1) {
+     		//TODO change to class
+     		this.rootElement.getElementById("paging-previous").style.visibility = "hidden";
      	} else {
-     		document.getElementById("paging-previous").style.visibility = "visible";
+     		//TODO change to class
+     		this.rootElement.getElementById("paging-previous").style.visibility = "visible";
      	}
 
-     	if(page === pages) {
-     		document.getElementById("paging-next").style.visibility = "hidden";
+     	// last page
+     	if(this.page === pages) {
+     		//TODO change to class
+     		this.rootElement.getElementById("paging-next").style.visibility = "hidden";
      	} else {
-     		document.getElementById("paging-next").style.visibility = "visible";
+     		//TODO change to class
+     		this.rootElement.getElementById("paging-next").style.visibility = "visible";
      	}
 
-     	if(page > 2) {
-     		page_item += '<div class="paging-pagenum" data-id="1">1</div>';
-     		if(page > 3) { page_item += "..."; }
-     	}
-
-     	for(x=1; x<=pages; x++) {
-     		if(x-1 === page) {
-     			page_item += '<div class="paging-pagenum" data-id="'+x+'" >'+x+'</div>';
-     		}
-
-     		if(x === page) {
-     			page_item += '<div class="paging-selected" data-id="'+x+'">'+x+'</div>';
-     		}
-
-     		if(x+1 === page) {
-     			page_item += '<div class="paging-pagenum" data-id="'+x+'">'+x+'</div>';
+     	if(this.page > 2) {
+     		pageItems += '<div class="paging-pagenum" data-id="1">1</div>';
+     		if(this.page > 3) {
+     			pageItems += "...";
      		}
      	}
 
-     	if(page+1 < pages ) {
-     		if(page+2 < pages) { page_item += "..."; } 
-     		page_item += '<div class="paging-pagenum" data-id="'+pages+'">'+pages+'</div>';
+     	for( var x=1; x<=pages; x++) {
+     		if(x-1 === this.page) {
+     			pageItems += '<div class="paging-pagenum" data-id="'+x+'" >'+x+'</div>';
+     		}
+
+     		if(x === this.page) {
+     			pageItems += '<div class="paging-selected" data-id="'+x+'">'+x+'</div>';
+     		}
+
+     		if(x+1 === this.page) {
+     			pageItems += '<div class="paging-pagenum" data-id="'+x+'">'+x+'</div>';
+     		}
      	}
 
-     	document.getElementById("paging-buttons").innerHTML = page_item;
+     	if(this.page+1 < pages ) {
+     		if(this.page+2 < pages) { pageItems += "..."; } 
+     		pageItems += '<div class="paging-pagenum" data-id="'+pages+'">'+pages+'</div>';
+     	}
+
+		//TODO change to class
+     	this.rootElement.getElementById("paging-buttons").innerHTML = pageItems;
      };
 
-     videoList.prototype.select = function() {
+     List.prototype.select = function() {
      	this.category = document.getElementById("category-select").value;
      	if(this.category !== "All") {
      		this.jsonData = categoriesHelper.parseVideos(this.category, this.allData);
@@ -175,7 +229,7 @@
      	this.changeItemsToPage();
      };
 
-     videoList.prototype.changePage = function(operation) {	
+     List.prototype.changePage = function(operation) {	
      	switch(operation) {
      		case 'next': this.page = paginationHelper.nextPage(this.page, this.jsonLength, this.itemsToPage);break;
      		case 'previous': this.page = paginationHelper.previousPage(this.page);break;
@@ -185,7 +239,7 @@
      };
 
 
-     videoList.prototype.changeItemsToPage = function() {
+     List.prototype.changeItemsToPage = function() {
      	this.itemsToPage = document.getElementById("list-select").value*1;
      	var page_actual = this.page*1;
      	var page_all = this.jsonLength / this.itemsToPage;
@@ -197,22 +251,8 @@
      	this.render();
      };
 
-
-
-	//HELPER CLASS FOR FUNCTION WRITE
-	var writeHelper = {
-		timestampParse: function(timestamp) {
-			var date = new Date(timestamp*1);
-			var day = date.getDate();
-			var month = date.getMonth();
-			var year = date.getFullYear();
-			var day_w = date.getDay();
-
-			days_array = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-			months_array = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-			return days_array[day_w]+", "+day+" "+months_array[month]+" "+year;
-		},
-
+	
+	var WriteHelper = {
 		getImage: function(image) {
 			if(image == "") {
 				return "no-image";
@@ -227,8 +267,8 @@
 
 			if(categories.length === 0) {
 				span = document.createElement("span");
-				span_text = document.createTextNode("No categories");	
-				span.appendChild(span_text);
+				spanText = document.createTextNode("No categories");	
+				span.appendChild(spanText);
 				return out.appendChild(span);
 			}
 
@@ -243,7 +283,7 @@
 					span_text = document.createTextNode(categories[i]+", ");	
 				}
 
-				span.appendChild(span_text);
+				span.appendChild(spanText);
 				out.appendChild(span);
 			}
 			return out;
@@ -315,19 +355,18 @@ var paginationHelper = {
 		}
 	},
 
-	itemsWriteSelect: function(num) {
+	itemsWriteSelect: function(pagingOptions, selectedPage, rootElement, selectParentClass) {
 		var item;
-		var array = [8,12,16,20];
-		var num;
+		//var array = [8,12,16,20];
 
-		for(var x=0; x<array.length; x++) {
-			if(array[x] == num) {
-				item += "<option value="+array[x]+" selected>"+array[x]+"</option>";
+		for(var x=0; x<pagingOptions.length; x++) {
+			if(pagingOptions[x] == selectedPage) {
+				item += "<option value="+pagingOptions[x]+" selected>"+pagingOptions[x]+"</option>";
 			} else {
-				item += "<option value="+array[x]+" >"+array[x]+"</option>";
+				item += "<option value="+pagingOptions[x]+" >"+pagingOptions[x]+"</option>";
 			}
 		}
-		document.getElementById("list-select").innerHTML = item;
+		rootElement.getElementById(selectParentClass).innerHTML = item;
 	},
 
 	clickEvent: function() {
@@ -341,7 +380,7 @@ var paginationHelper = {
 };
 
 
-var categoriesHelper = {
+var CategoriesHelper = {
 	selectIndex: function(value) {
 		var options = document.getElementById("category-select").options;
 		for(x=0; x<options.length; x++) {
@@ -465,7 +504,9 @@ var animations = {
 };
 // END ANIMATION
 
-var list = new videoList("http://academy.tutoky.com/api/json.php", PAGE, ITEM_TO_PAGE, CATEGORY);
+// konkretne instancie triedy List
+var list1 = new List("videolist1", "http://academy.tutoky.com/api/json.php", PAGE, ITEM_TO_PAGE, CATEGORY);
+//var list2 = new List("videolist2", "http://academy.tutoky.com/api/json.php", PAGE, ITEM_TO_PAGE, CATEGORY);
 
 document.getElementById("list-select").addEventListener("change", function(){list.changeItemsToPage()}.bind(this));
 document.getElementById("paging-previous").addEventListener("click", function(){list.changePage('previous')}.bind(this));
