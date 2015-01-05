@@ -86,6 +86,8 @@
 				this.changeFavoriteSettings("add_to_favorites", e.target.getAttribute("data-fav"));
 			} 		
 		}.bind(this), false);
+
+
 		this.itemsWriteSelect(PAGING_OPTIONS, CLASS_NAME_PAGING_ITEMS_TO_PAGE_SELECT);
 	}
 
@@ -329,5 +331,5 @@
      }
 
      var list = new List(HTML_SCOPE, URL, PAGE, ITEM_TO_PAGE, CATEGORY, SELECTED_CATEGORY);
-
+     console.log(list);
  }(window, document));

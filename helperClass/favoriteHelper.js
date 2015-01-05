@@ -1,4 +1,4 @@
-var favoriteHelper = {
+var FavoriteHelper = {
 	enableButton: function(favoriteEnable) {
 		var item = "";
 		var enableCase = "";
@@ -46,16 +46,14 @@ var favoriteHelper = {
 		return item;
 	},
 
-	parseVideosByFavorites: function(enable, parseBy, allData) {
+	parseVideosByFavorites: function(parseBy, allData) {
 		var output = [];
-		if(enable) {
+		
 			for(var x=0; x<parseBy.length; x++) {
 				output.push(allData[parseBy[x]]);
 			}
-
 			return output;
-		}
-		return allData;
+		
 	},
 
 	textToItem: function(video) {
