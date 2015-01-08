@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<note>
+	<to>Tove</to>
+	<from>Jani</from>
+	<heading>Reminder</heading>
+	<body>Don't forget me this weekend!</body>
+</note>
+
+"<config>" +
+	"<data_adress>http://academy.tutoky.com/api/json.php</data_adress>" +
+	"<page>1</page>" +
+	"<items_to_page>12</items_to_page>" +
+	"<root_element>videolist</root_element>" +
+	"<paging_options>[8,12,16,20]</paging_options>" +
+	"<class_name_paging_previous>paging-previous</class_name_paging_previous>" +
+	"<class_name_paging_next>paging-next</class_name_paging_next>" +
+	"<class_name_category_select>favorites-category-select</class_name_category_select>" +
+	"<class_name_paging_load_more>load-button</class_name_paging_load_more>" +
+	"<class_name_paging_items_to_page_select>favorites-list-items-to-page</class_name_paging_items_to_page_select>" +
+	"<class_name_favorites_enable_button>favorites-enable-button</class_name_favorites_enable_button>" +
+	"<handler type='atricle_event'>true</handler type='atricle_event'>true" +
+	"<handler type='category_event'>true</handler>" +
+	"<handler type='config_event'>true</handler>" +
+	"<handler type='favorite_event'>true</handler>" +
+	"<handler type='pagination_event'>true</handler>" +
+	"<handler type='results_event'>true</handler>" +
+	"</config>";

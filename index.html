@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="shortcut icon" type="image/jpg" href="favicon.jpg"/>
+	<link rel="shortcut icon" type="image/jpg" href="img/favicon.jpg"/>
 	<meta charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" href="css/reset.css" />
 	<link rel="stylesheet" media="screen and (min-width: 600px)" href="css/style.css" />
@@ -13,7 +13,7 @@
 		<header class="list-header">
 			<h1 class="list-title">LATEST VIDEOS</h1>
 			
-			<img class="list-favorites" src="settings.ico">
+			<img class="list-favorites" src="img/settings.ico">
 		</header>
 
 		<ul class="list-body" id="list-body">
@@ -25,7 +25,7 @@
 			PREVIOUS
 			</div>
 			<div class="paging-buttons" id="paging-buttons">
-				<!-- BUTTONS -->
+				<div id="paging-buttons"></div>
 			</div>
 			<div class="paging-next button">NEXT</div>
 		</footer>
@@ -57,11 +57,36 @@
 
 </body>
 
-<script src="jquery.min.js"></script>
+<script src="js/libaries/jquery.min.js"></script>
 <!-- helperClass -->
 
+<script src="js/helperClass/Animations/DesktopAnimations.js"></script>
 
-<script src="prototype_libary4.js"></script>
+<script src="js/helperClass/CacheLoader/AjaxLoader.js"></script>
+<script src="js/helperClass/CacheLoader/XMLLoader.js"></script>
+
+<script src="js/helperClass/VideoList/VideoListHelper.js"></script>
+<script src="js/helperClass/VideoList/ArticleList.js"></script>
+<script src="js/helperClass/VideoList/Paginator.js"></script>
+
+<script src="js/helperClass/Filters/CategoryFilter.js"></script>
+<script src="js/helperClass/Filters/TimeFilter.js"></script>
+<script src="js/helperClass/Filters/CategoryFilter.js"></script>
+
+<script src="js/helperClass/FavoriteList/FavoriteListRenderer.js"></script>
+
+<script src="js/helperClass/Handlers/PaginationEventHandler.js"></script>
+<script src="js/helperClass/Handlers/ConfigButtonEventHandler.js"></script>
+<script src="js/helperClass/Handlers/ResultsEventHandler.js"></script>
+<script src="js/helperClass/Handlers/FavoriteEventHandler.js"></script>
+
+<script src="js/helperClass/ResultSelector/ResultsSelector.js"></script>
+
+<script src="js/App.js"></script>
+
+
+
+
 
 </html>
 

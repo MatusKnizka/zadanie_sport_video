@@ -1,6 +1,6 @@
+function AjaxLoader() {}
 
-	var AjaxHelper = {};
-	AjaxHelper.load = function(url, params, callback) {
+AjaxLoader.prototype.load = function(url, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = ensureReadiness; 
 		function ensureReadiness() {
@@ -16,4 +16,4 @@
 		}     
 		xhr.open('GET', url, true);
 		xhr.send('');
-	}
+}
