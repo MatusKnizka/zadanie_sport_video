@@ -14,6 +14,7 @@
 		this.resultOptions = resultOptions;
 		this.actualCategory = actualCategory;
 
+		this.storageCache = JSON.parse(localStorage.getItem(this.rootElementName));
 
 		this.ajaxLoader = new AjaxLoader();
 		this.xmlLoader = new XMLLoader();
@@ -23,42 +24,47 @@
 		this.categoryFilter = new CategoryFilter();
 		this.timeFilter = new TimeFilter();
 		this.categoryFilter = new CategoryFilter();
+		this.favoriteFilter = new FavoriteFilter();
+		this.identificationFilter = new IdentificationFilter();
 
 		this.paginator = new Paginator();
 		this.resultSelector = new ResultSelector();
 
+
 		this.favoriteListRenderer = new FavoriteListRenderer();
 
-		this.configButtonEventHandler = new ConfigButtonEventHandler();
-		this.paginationEventHandler = new PaginationEventHandler();
-		this.resultEventHandler = new ResultsEventHandler();
-		this.favoriteEventHandler = new FavoriteEventHandler();
+		this.managerEventHandler = new ManagerEventHandler(this);
 
 		this.desktopAnimations = new DesktopAnimations();
 	};
 
 	App.prototype.init = function() {
-		this.ajaxLoader.load(this.urlData, function(xhr) { 
-			this.cacheLoadedData(xhr.responseText); 
-			this.initConfig();
-		}.bind(this));
-
-		this.paginationEventHandler.eventHandler(this);
-		this.configButtonEventHandler.eventHandler(this);
-		this.resultEventHandler.eventHandler(this);
-		this.favoriteEventHandler.eventHandler(this);
+		var storage = JSON.parse(localStorage.getItem(this.rootElementName));
+		if(storage === null) {
+			this.storageCache.timestamp = Date.now();
+			this.storageCache.favorites = [];
+			this.ajaxLoader.load(this.urlData, function(xhr) { 
+				this.storageCache.data = JSON.parse(xhr.responseText);
+				localStorage.setItem(this.rootElementName, JSON.stringify(this.storageCache));
+				this.cacheLoadedData();
+			}.bind(this));
+		} else if(storage.timestamp+(2*60*1000) > Date.now()) {
+			this.storageCache.timestamp = Date.now();
+			this.storageCache.favorites = storage.favorites;
+			this.ajaxLoader.load(this.urlData, function(xhr) { 
+				this.storageCache.data = JSON.parse(xhr.responseText);
+				localStorage.setItem(this.rootElementName, JSON.stringify(this.storageCache));
+				this.cacheLoadedData();
+			}.bind(this));
+		} else {
+			this.cacheLoadedData();
+		}
 	};
 
-	App.prototype.initConfig = function() {
-		this.resultSelector.renderer(this);
-		this.favoriteListRenderer.renderSelectList(this);
-	};
 
-	App.prototype.cacheLoadedData = function(data) {
-		this.data = JSON.parse(data);
-		this.allData = JSON.parse(data);
-		this.itemMin = this.videoListHelper.itemMin(this.page, this.itemsToPage);
-		this.itemMax = this.videoListHelper.itemMax(this.page, this.data.length, this.itemsToPage);
+	App.prototype.cacheLoadedData = function() {
+		this.allData = this.identificationFilter.addIdToData(JSON.parse(localStorage.getItem(this.rootElementName)));
+		this.data = this.allData;
 
 		this.render();
 	};
@@ -66,6 +72,9 @@
 	App.prototype.render = function() {
 		this.articleList.articleRenderer(this);
 		this.paginator.paginationRenderer(this);
+
+		this.resultSelector.renderer(this);
+		this.favoriteListRenderer.renderSelectList(this);
 
 		this.desktopAnimations.animVideoList(this.rootElementName);
 		this.desktopAnimations.itemHover(this.rootElementName);
@@ -75,5 +84,7 @@
 
 	var app = new App("videolist", 12, 1, "http://academy.tutoky.com/api/json.php", "http://zadanie.webmedial.eu/config.xml", [8,12,16,20], "All");
 	app.init();
+
+
 
 }(window, document));

@@ -76,3 +76,5 @@ CategoryFilter.prototype.filterCategoriesToSelectList = function(jsonData, actua
 	}
 	return item;
 };
+
+
