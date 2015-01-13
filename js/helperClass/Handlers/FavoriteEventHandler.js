@@ -3,16 +3,18 @@ function FavoriteEventHandler() {}
 FavoriteEventHandler.prototype.eventHandler = function(parent) {
 	parent.rootElement.querySelector(".list-body").addEventListener("click", function (e){
 		if(e.target.getAttribute("data-fav") !== null) {
-			this.afterEvent(parseInt(e.target.getAttribute("data-fav")), parent);
+			this.afterEvent(parseInt(e.target.getAttribute("data-fav")), parent, $(e.target).parent().parent().index());
+
 		} 		
 	}.bind(this), false);
 };
 
 
-FavoriteEventHandler.prototype.afterEvent = function(itemId, parent) {
+FavoriteEventHandler.prototype.afterEvent = function(itemId, parent, parentId) {
 	localStorage.setItem(parent.rootElementName, JSON.stringify(this.toLocalStorage(itemId, parent)));
-	parent.rootElement.getElementsByClassName("list-item-shadow-favorite")[itemId%parent.itemsToPage].style.backgroundPosition = this.changeStar(itemId, parent);
-};
+	parent.rootElement.getElementsByClassName("list-item-shadow-favorite")[parentId].style.backgroundPosition = this.changeStar(itemId, parent);
+
+	};
 
 
 FavoriteEventHandler.prototype.toLocalStorage = function(itemId, parent) {

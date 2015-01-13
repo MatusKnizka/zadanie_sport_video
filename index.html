@@ -16,13 +16,72 @@
 			<img class="list-favorites" src="img/settings.ico">
 		</header>
 
+		<article class="favorites" style="display:none;">
+			Category
+			<select class="favorites-list-select favorites-category-select">
+				<!-- SELECT LIST FOR CATEGORIES -->
+			</select>
+			Items to page
+			<select class="favorites-list-select favorites-list-items-to-page">
+				<!-- SELECT LIST FOR ITEMS TO PAGE -->
+			</select>
+			<br>
+			<div class="favorites-enable-button">
+				<!-- ENABLE OR DISABLE FAVORITES LIST -->
+			</div>
+		</article>
+
 		<ul class="list-body" id="list-body">
-		<!-- BODY FOR ITEMS -->
+			<!-- BODY FOR ITEMS -->
 		</ul>
 
 		<footer class="paging">
 			<div class="paging-previous button">
-			PREVIOUS
+				PREVIOUS
+			</div>
+			<div class="paging-buttons" id="paging-buttons">
+				<div id="paging-buttons"></div>
+			</div>
+			<div class="paging-next button">NEXT</div>
+		</footer>
+
+		<article class="load-button">
+			<button>LOAD MORE</button>
+		</article>
+	</main>
+
+
+
+
+	<main class="videolist" id="videolist1">
+		<header class="list-header">
+			<h1 class="list-title">LATEST VIDEOS</h1>
+			
+			<img class="list-favorites" src="img/settings.ico">
+		</header>
+
+		<article class="favorites" style="display:none;">
+			Category
+			<select class="favorites-list-select favorites-category-select">
+				<!-- SELECT LIST FOR CATEGORIES -->
+			</select>
+			Items to page
+			<select class="favorites-list-select favorites-list-items-to-page">
+				<!-- SELECT LIST FOR ITEMS TO PAGE -->
+			</select>
+			<br>
+			<div class="favorites-enable-button">
+				<!-- ENABLE OR DISABLE FAVORITES LIST -->
+			</div>
+		</article>
+
+		<ul class="list-body" id="list-body">
+			<!-- BODY FOR ITEMS -->
+		</ul>
+
+		<footer class="paging">
+			<div class="paging-previous button">
+				PREVIOUS
 			</div>
 			<div class="paging-buttons" id="paging-buttons">
 				<div id="paging-buttons"></div>
@@ -34,24 +93,7 @@
 			<button>LOAD MORE</button>
 		</article>
 
-		<article class="favorites" style="display:none;">
-			<h3 class="favorites-title">Settings</h3>
-
-			<select class="favorites-list-select favorites-category-select">
-				<!-- SELECT LIST FOR CATEGORIES -->
-			</select>
-			<br>
-			<select class="favorites-list-select favorites-list-items-to-page">
-				<!-- SELECT LIST FOR ITEMS TO PAGE -->
-			</select>
-			<br>
-			<div class="favorites-enable-button">
-				<!-- ENABLE OR DISABLE FAVORITES LIST -->
-			</div>
-		</article>
 	</main>
-
-
 
 
 
@@ -65,6 +107,7 @@
 
 <script src="js/helperClass/CacheLoader/AjaxLoader.js"></script>
 <script src="js/helperClass/CacheLoader/XMLLoader.js"></script>
+<script src="js/helperClass/CacheLoader/CacheLoader.js"></script>
 
 <script src="js/helperClass/VideoList/VideoListHelper.js"></script>
 <script src="js/helperClass/VideoList/ArticleList.js"></script>
@@ -78,6 +121,7 @@
 <script src="js/helperClass/Filters/IdentificationFilter.js"></script>
 
 <script src="js/helperClass/FavoriteList/FavoriteListRenderer.js"></script>
+<script src="js/helperClass/CategoryList/CategoryListRenderer.js"></script>
 
 <script src="js/helperClass/Handlers/ManagerEventHandler.js"></script>
 <script src="js/helperClass/Handlers/PaginationEventHandler.js"></script>
@@ -86,7 +130,6 @@
 <script src="js/helperClass/Handlers/FavoriteEventHandler.js"></script>
 <script src="js/helperClass/Handlers/CategoryEventHandler.js"></script>
 
-<script src="js/helperClass/ResultSelector/ResultsSelector.js"></script>
 
 <script src="js/App.js"></script>
 

@@ -1,35 +1,31 @@
-body
-{
+body {
 	font-family: Trebuchet MS;
 }
 
-.list-body
-{
+.list-body {
 	text-align: center;
 }
 
 
-.list-header
-{
+.list-header {
 	background: -webkit-linear-gradient(#003363, #003363); 
 	background: -o-linear-gradient(#7fb0f4, #003363); 
 	background: -moz-linear-gradient(#7fb0f4, #003363);  
 	background: linear-gradient(#006dd2, #003363); 
 	padding: 10px;
+	height: 20px;
 }
 
 
 
-.list-title
-{
+.list-title {
 	font-size: 18px;
 	color: white;
 	font-family: Trebuchet MS;
 	display: inline-block;
 }
 
-.list-item
-{
+.list-item {
 	margin: 10px;
 	padding: 5px;
 	width: 200px;
@@ -51,20 +47,18 @@ body
 	float: right;
 
 	appearance:none;
--moz-appearance:none; /* Firefox */
--webkit-appearance:none;
-white-space: nowrap;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+	white-space: nowrap;
 }
 
-.list-item-video
-{
+.list-item-video {
 	width: 100%;
 	height: 140px;
 	background-size: 100%;
 }
 
-.list-item-shadow
-{
+.list-item-shadow {
 	width: 200px;
 	height: 175px; 
 	background-color: #585858;
@@ -104,8 +98,7 @@ white-space: nowrap;
 }
 
 
-.list-item-title
-{
+.list-item-title {
 	color: #0028f0;
 	font-size: 18px;
 	font-weight: bold;
@@ -116,34 +109,29 @@ white-space: nowrap;
 	
 }
 
-.list-item-date
-{
+.list-item-date {
 	color: #3e3e3e;
 	font-size: 13px;
 }
 
-.load-button
-{
+.load-button {
 	display: none;
 }
 
-.paging
-{
+.paging {
 	width: 100%;
 	text-align: center;
 	margin-bottom: 20px;
 	margin-top: 20px;
 }
 
-.paging-buttons
-{
+.paging-buttons {
 	display: inline-block;
 	width: 50%;
 }
 
 
-.button
-{
+.button {
 	background-color: #5aa1ec;
 	color: white;
 	display: inline-block;
@@ -156,24 +144,21 @@ white-space: nowrap;
 
 
 
-.paging-previous
-{
+.paging-previous {
 	border-bottom-right-radius: 10px;
 	border-top-right-radius: 10px;
 	border-top-left-radius: 30px;
 	border-bottom-left-radius: 30px;
 }
 
-.paging-next
-{
+.paging-next {
 	border-bottom-right-radius: 30px;
 	border-top-right-radius: 30px;
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
 }
 
-.paging-pagenum
-{
+.paging-pagenum {
 	display: inline-block;
 	background-color: #5aa1ec;
 	color: white;
@@ -186,8 +171,7 @@ white-space: nowrap;
 
 
 
-.paging-selected
-{
+.paging-selected {
 	display: inline-block;
 	color: white;
 	padding: 10px;
@@ -198,9 +182,8 @@ white-space: nowrap;
 
 
 .favorites {
-	position: fixed;
-	top: 10%;
-	right: 10px;
+	position: relative;
+
 	border: 1px solid #cccccc;
 	background-color: white;
 	z-index: 10;
@@ -232,14 +215,8 @@ white-space: nowrap;
 	color: white;
 	background: #006dd2;
 	margin-top: 5px;
-	cursor: pointer;
-	/*background: -webkit-linear-gradient(#003363, #003363); 
-	background: -o-linear-gradient(#7fb0f4, #003363); 
-	background: -moz-linear-gradient(#7fb0f4, #003363);  
-	background: linear-gradient(#006dd2, #003363); */
+	cursor: pointer;	
 }
-
-/*#ffe966   #d4b70a*/
 
 .favorites-list-item:hover {
 	background: #003363;
@@ -262,7 +239,4 @@ white-space: nowrap;
 	white-space: nowrap;
 }
 
-.favorites-enable {
-
-}
 

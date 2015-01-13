@@ -22,3 +22,11 @@ VideoListHelper.prototype.getFavoriteStar = function(parent, i) {
 	var output = 'background: url(img/favorites.png); background-size: 80px 40px; background-position: left;';
 	return output;
 }
+
+
+VideoListHelper.prototype.maxPages = function(page, itemsToPage, itemsAll) {
+	if(page >= itemsAll/itemsToPage) {
+		page = Math.ceil(itemsAll/itemsToPage);
+	}
+	return page;
+};
